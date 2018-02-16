@@ -1,6 +1,7 @@
 pragma solidity ^0.4.17;
 
 /* solium-disable */
+/* eslint-disable */
 import "truffle/Assert.sol";
 import "truffle/DeployedAddresses.sol";
 import "../contracts/Adoption.sol";
