@@ -85,8 +85,10 @@ App = {
       App.contracts.TutorialToken.deployed().then(function(instance) {
         tutorialTokenInstance = instance;
 
+        console.log("Balance from :", account);
         return tutorialTokenInstance.balanceOf(account);
       }).then(function(result) {
+        console.log("Result:", result);
         balance = result.c[0];
 
         $('#TTBalance').text(balance);
