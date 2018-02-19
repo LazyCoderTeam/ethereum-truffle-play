@@ -146,14 +146,12 @@ App = {
         var tutorialCrowdsaleInstance = instance;
 
         console.log("Balance from :", tutorialCrowdsaleInstance.wallet());
-        return tutorialCrowdsaleInstance.wallet().then(wallet => {
-          return wallet.balance;
-        });
+        return tutorialCrowdsaleInstance.weiRaised()
       }).then(function (result) {
-        console.log("Result:", result);
-        let balance = result;
+        console.log("Wei:", result);
+        let balance = web3.fromWei(result, 'ether');
 
-        $('#TTContractBalance').text(balance);
+        $('#ContractBalance').text(balance);
       }).catch(function (err) {
         console.log(err.message);
       });
