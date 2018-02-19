@@ -35,11 +35,15 @@
             </div>
             <div class="panel-body">
               <h4>Balance</h4>
-              <strong>Balance</strong>: <span id="TTBalance"></span> TT<br/><br/>
+              <strong>Original Token Balance</strong>: <span id="TTBalance"></span> TT<br/><br/>
+              <strong>Contract Token Balance</strong>: <span id="TTContractBalance"></span> TT<br/><br/>
+              <strong>Contract Ether Balance</strong>: <span id="ContractBalance"></span> TT<br/><br/>
               <h4>Transfer</h4>
               <input type="text" class="form-control" id="TTTransferAddress" placeholder="Address" />
               <input type="text" class="form-control" id="TTTransferAmount" placeholder="Amount" value="1"/>
-              <button class="btn btn-primary" id="transferButton" type="button">Transfer</button>
+              <button class="btn btn-primary" id="transferButton" type="button">Transfer</button><br/>
+              <pre id="TTResult"></pre><br/><br/>
+              
             </div>
           </div>
         </div>

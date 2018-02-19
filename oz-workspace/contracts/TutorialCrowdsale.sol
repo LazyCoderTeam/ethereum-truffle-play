@@ -5,6 +5,7 @@ import "zeppelin-solidity/contracts/crowdsale/RefundableCrowdsale.sol";
 import "zeppelin-solidity/contracts/token/ERC20/MintableToken.sol";
 
 import "./TutorialToken.sol";
+// import "./TutorialTokenHolder.sol";
 
 /**
  * @title SampleCrowdsaleToken
@@ -37,29 +38,15 @@ import "./TutorialToken.sol";
  */
 contract TutorialCrowdsale is CappedCrowdsale, RefundableCrowdsale {
 
-  address myIco = address(0);
-
-  function TutorialCrowdsale(uint256 _startTime, uint256 _endTime, uint256 _rate, uint256 _goal, uint256 _cap, address _wallet, address icoAddress) public
+  function TutorialCrowdsale(uint256 _startTime, uint256 _endTime, uint256 _rate, uint256 _goal, uint256 _cap, address _wallet, MintableToken _token) public
     CappedCrowdsale(_cap)
     FinalizableCrowdsale()
     RefundableCrowdsale(_goal)
-    Crowdsale(_startTime, _endTime, _rate, _wallet)
-    Ownable()
+    Crowdsale(_startTime, _endTime, _rate, _wallet, _token)
   {
     //As goal needs to be met for a successful crowdsale
     //the value needs to less or equal than a cap which is limit for accepted funds
-    myIco = icoAddress;
     require(_goal <= _cap);
-  }
-
-  function createTokenContract() internal returns (MintableToken) {
-    if (myIco == address(0)) {
-      var tuttoken = new TutorialToken();
-      myIco = address(tuttoken);
-      return tuttoken;
-    } else {
-      return TutorialToken(myIco);
-    }
   }
 
 }

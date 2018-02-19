@@ -37,24 +37,31 @@ App = {
 
         $.getJSON('TutorialToken.json', function (data) {
           // Get the necessary contract artifact file and instantiate it with truffle-contract.
-          
+
+          var TutorialTokenArtifact = data;
+          App.contracts.TutorialToken = TruffleContract(TutorialTokenArtifact);
+
+          // Set the provider for our contract.
+          App.contracts.TutorialToken.setProvider(App.web3Provider);
+
           instance.token().then(address => {
 
-            console.log("Data",address);
-            var TutorialTokenArtifact = data;
-            App.contracts.TutorialToken = TruffleContract(TutorialTokenArtifact);
-            
+            console.log("instance.token()", address);
+            var TutorialCrowdsaleTokenArtifact = data;
+            App.contracts.TutorialCrowdsaleToken = TruffleContract(TutorialCrowdsaleTokenArtifact);
+
             // Set the provider for our contract.
-            App.contracts.TutorialToken.setProvider(App.web3Provider);
-            
+            App.contracts.TutorialCrowdsaleToken.setProvider(App.web3Provider);
+
             return App.getBalances();
           });
+
         });
       })
-        
+
     });
 
-    
+
 
     return App.bindEvents();
   },
@@ -84,11 +91,12 @@ App = {
         return instance.token().then(addr => {
           tokenAddress = addr
           // return tutorialTokenInstance.send(web3.toWei(amount, "ether"))
-          return tutorialTokenInstance.buyTokens(account, {value:web3.toWei(amount, "ether")});
+          return tutorialTokenInstance.buyTokens(account, { value: web3.toWei(amount, "ether") });
           // return tutorialTokenInstance.send(amount)
         });
 
       }).then(function (result) {
+        $('#TTResult').text(JSON.stringify(result,null,2));
         return App.getBalances();
       }).catch(function (err) {
         console.log(err);
@@ -99,7 +107,6 @@ App = {
   getBalances: function () {
     console.log('Getting balances...');
 
-    var tutorialTokenInstance;
 
     web3.eth.getAccounts(function (error, accounts) {
       if (error) {
@@ -108,15 +115,45 @@ App = {
 
       var account = accounts[0];
       App.contracts.TutorialToken.deployed().then(function (instance) {
-        tutorialTokenInstance = instance;
+        var tutorialTokenInstance = instance;
 
         console.log("Balance from :", account);
         return tutorialTokenInstance.balanceOf(account);
       }).then(function (result) {
         console.log("Result:", result);
-        balance = result.c[0];
+        let balance = result.c[0];
 
         $('#TTBalance').text(balance);
+      }).catch(function (err) {
+        console.log(err.message);
+      });
+
+      App.contracts.TutorialCrowdsaleToken.deployed().then(function (instance) {
+        var tutorialTokenInstance = instance;
+
+        console.log("Balance from :", account);
+        return tutorialTokenInstance.balanceOf(account);
+      }).then(function (result) {
+        console.log("Result:", result);
+        let balance = result.c[0];
+
+        $('#TTContractBalance').text(balance);
+      }).catch(function (err) {
+        console.log(err.message);
+      });
+
+      App.contracts.TutorialCrowdsale.deployed().then(function (instance) {
+        var tutorialCrowdsaleInstance = instance;
+
+        console.log("Balance from :", tutorialCrowdsaleInstance.wallet());
+        return tutorialCrowdsaleInstance.wallet().then(wallet => {
+          return wallet.balance;
+        });
+      }).then(function (result) {
+        console.log("Result:", result);
+        let balance = result;
+
+        $('#TTContractBalance').text(balance);
       }).catch(function (err) {
         console.log(err.message);
       });

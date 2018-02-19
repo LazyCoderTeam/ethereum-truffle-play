@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "merge-json": "0.1.0-b.3",
-    "zeppelin-solidity": "^1.6.0"
+    "zeppelin-solidity": "git+https://github.com:OpenZeppelin/zeppelin-solidity.git#master"
   },
   "description": ""
 }
