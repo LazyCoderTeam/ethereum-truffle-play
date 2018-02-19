@@ -10,7 +10,7 @@ module.exports = function (deployer, network, accounts) {
 
       const startTime = web3.eth.getBlock(web3.eth.blockNumber).timestamp + 1 // one second in the future
       // const startTime = 1518931829
-      const endTime = startTime + (3600 * 5) // 20 days
+      const endTime = startTime + (3600 * .5) // half an hour
       const goal = web3.toWei(30, "ether");
       const cap = web3.toWei(1200, "ether");
       const rate = new web3.BigNumber(1000)
