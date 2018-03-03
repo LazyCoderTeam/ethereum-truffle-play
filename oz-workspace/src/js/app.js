@@ -68,12 +68,14 @@ App = {
 
   bindEvents: function () {
     $(document).on('click', '#transferButton', App.handleTransfer);
+    $(document).on('click', '#buyButton', App.handleBuy);
+    
   },
 
   handleTransfer: function (event) {
     event.preventDefault();
 
-    var amount = parseInt($('#TTTransferAmount').val());
+    var amount = $('#TTTransferAmount').val();
     var toAddress = $('#TTTransferAddress').val();
 
     var tutorialTokenInstance;
@@ -85,19 +87,42 @@ App = {
 
       var account = accounts[0];
       window.App = App
-      App.contracts.TutorialCrowdsale.deployed().then(function (instance) {
+      App.contracts.TutorialToken.deployed().then(function (instance) {
 
         tutorialTokenInstance = instance;
-        return instance.token().then(addr => {
-          tokenAddress = addr
-          // return tutorialTokenInstance.send(web3.toWei(amount, "ether"))
-          return tutorialTokenInstance.buyTokens(account, { value: web3.toWei(amount, "ether") });
-          // return tutorialTokenInstance.send(amount)
-        });
-
+        tutorialTokenInstance.transfer(toAddress, amount);
+        
       }).then(function (result) {
         $('#TTResult').text(JSON.stringify(result,null,2));
-        return App.getBalances();
+        setTimeout(() => {App.getBalances(); }, 1);
+      }).catch(function (err) {
+        console.log(err);
+      });
+    });
+  },
+
+  handleBuy: function (event) {
+    event.preventDefault();
+
+    var amount = $('#TTBuyAmount').val();
+    
+    var tutorialCrowdsaleInstance;
+
+    web3.eth.getAccounts(function (error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+      window.App = App
+      App.contracts.TutorialCrowdsale.deployed().then(function (instance) {
+
+        tutorialCrowdsaleInstance = instance;
+        console.log("Value:", web3.toWei(web3.toBigNumber(amount), "ether"))
+        return tutorialCrowdsaleInstance.buyTokens(account, { value: web3.toWei(web3.toBigNumber(amount), "ether") });
+      }).then(function (result) {
+        $('#TTResult').text(JSON.stringify(result,null,2));
+        setTimeout(() => {App.getBalances(); }, 1);
       }).catch(function (err) {
         console.log(err);
       });
@@ -121,8 +146,7 @@ App = {
         return tutorialTokenInstance.balanceOf(account);
       }).then(function (result) {
         console.log("Result:", result);
-        let balance = result.c[0];
-
+        let balance = web3.toBigNumber(result).div(1e18).toFixed(18);
         $('#TTBalance').text(balance);
       }).catch(function (err) {
         console.log(err.message);
@@ -130,12 +154,11 @@ App = {
 
       App.contracts.TutorialCrowdsaleToken.deployed().then(function (instance) {
         var tutorialTokenInstance = instance;
-
         console.log("Balance from :", account);
         return tutorialTokenInstance.balanceOf(account);
       }).then(function (result) {
         console.log("Result:", result);
-        let balance = result.c[0];
+        let balance = web3.toBigNumber(result).div(1e18).toFixed(18);
 
         $('#TTContractBalance').text(balance);
       }).catch(function (err) {

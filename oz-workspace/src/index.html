@@ -35,13 +35,16 @@
             </div>
             <div class="panel-body">
               <h4>Balance</h4>
-              <strong>Original Token Balance</strong>: <span id="TTBalance"></span> TT<br/><br/>
-              <strong>Contract Token Balance</strong>: <span id="TTContractBalance"></span> TT<br/><br/>
+              <strong>Token.balance()</strong>: <br/><span id="TTBalance"></span> TT<br/><br/>
+              <strong>Contract.token().balance()</strong>: <br/><span id="TTContractBalance"></span> TT<br/><br/>
               <strong>Contract Ether Balance</strong>: <span id="ContractBalance"></span> TT<br/><br/>
               <h4>Transfer</h4>
-              <input type="text" class="form-control" id="TTTransferAddress" placeholder="Address" />
-              <input type="text" class="form-control" id="TTTransferAmount" placeholder="Amount" value="1"/>
+              <input type="text" class="form-control" id="TTTransferAddress" placeholder="Recipient Address" />
+              <input type="text" class="form-control" id="TTTransferAmount" placeholder="Token Amount"/>
               <button class="btn btn-primary" id="transferButton" type="button">Transfer</button><br/>
+              <h4>Buy</h4>
+              <input type="text" class="form-control" id="TTBuyAmount" placeholder="Ether Amount"/>
+              <button class="btn btn-primary" id="buyButton" type="button">Buy</button><br/>
               <pre id="TTResult"></pre><br/><br/>
               
             </div>
@@ -57,5 +60,6 @@
     <script src="js/web3.min.js"></script>
     <script src="js/truffle-contract.js"></script>
     <script src="js/app.js"></script>
+    <script src="https://rawgit.com/MikeMcl/decimal.js-light/master/decimal.min.js"></script>
   </body>
 </html>

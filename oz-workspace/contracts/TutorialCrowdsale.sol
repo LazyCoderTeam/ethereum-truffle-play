@@ -1,11 +1,8 @@
 pragma solidity ^0.4.18;
 
-// import "github.com/OpenZeppelin/zeppelin-solidity/contracts/crowdsale/CappedCrowdsale.sol";
-// import "github.com/OpenZeppelin/zeppelin-solidity/contracts/crowdsale/RefundableCrowdsale.sol";
-// import "github.com/OpenZeppelin/zeppelin-solidity/contracts/token/ERC20/MintableToken.sol";
-
-import "zeppelin-solidity/contracts/crowdsale/CappedCrowdsale.sol";
-import "zeppelin-solidity/contracts/crowdsale/RefundableCrowdsale.sol";
+import "zeppelin-solidity/contracts/crowdsale/Validation/CappedCrowdsale.sol";
+import "zeppelin-solidity/contracts/crowdsale/distribution/RefundableCrowdsale.sol";
+// import "zeppelin-solidity/contracts/crowdsale/Validation/TimedCrowdsale.sol";
 import "zeppelin-solidity/contracts/token/ERC20/MintableToken.sol";
 
 import "./TutorialToken.sol";
@@ -40,13 +37,14 @@ import "./TutorialToken.sol";
  * After adding multiple features it's good practice to run integration tests
  * to ensure that subcontracts works together as intended.
  */
-contract TutorialCrowdsale is CappedCrowdsale, RefundableCrowdsale {
+contract TutorialCrowdsale is CappedCrowdsale, TimedCrowdsale, RefundableCrowdsale {
 
   function TutorialCrowdsale(uint256 _startTime, uint256 _endTime, uint256 _rate, uint256 _goal, uint256 _cap, address _wallet, MintableToken _token) public
     CappedCrowdsale(_cap)
     FinalizableCrowdsale()
     RefundableCrowdsale(_goal)
-    Crowdsale(_startTime, _endTime, _rate, _wallet, _token)
+    TimedCrowdsale(_startTime, _endTime)
+    Crowdsale(_rate, _wallet, _token)
   {
     //As goal needs to be met for a successful crowdsale
     //the value needs to less or equal than a cap which is limit for accepted funds

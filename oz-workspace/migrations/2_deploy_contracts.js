@@ -3,7 +3,7 @@ var TutorialCrowdsale = artifacts.require("./TutorialCrowdsale.sol");
 
 module.exports = function (deployer, network, accounts) {
 
-  deployer.deploy(TutorialToken).then(() => {
+  return deployer.deploy(TutorialToken).then(() => {
 
     return TutorialToken.deployed().then(tokenInstance => {
 
